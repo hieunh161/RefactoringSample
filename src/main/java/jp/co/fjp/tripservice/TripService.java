@@ -7,27 +7,35 @@ import jp.co.fjp.exception.DependentClassCallDuringUnitTestException;
 import jp.co.fjp.exception.UserNotLoggedInException;
 import jp.co.fjp.user.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class TripService {
+	@Autowired private TripDao tripDao;
 	// get trip by user
-	public List<Trip> getTripsByUser(User user, User loggedInUser)
+	public List<Trip> getFriendTrips(User friend, User loggedInUser)
 			throws UserNotLoggedInException,
 			DependentClassCallDuringUnitTestException {
 		// get user session then
+		validate(loggedInUser);
+
+		return friend.isFriendWith(loggedInUser) ? tripsBy(friend)
+				: noTrips();
+
+	}
+
+	protected void validate(User loggedInUser)
+			throws UserNotLoggedInException {
 		if (loggedInUser == null) {
 			throw new UserNotLoggedInException();
 		}
-
-		return user.isFriendWith(loggedInUser) ? tripsBy(user)
-				: noTrips();
-
 	}
 
 	protected ArrayList<Trip> noTrips() {
 		return new ArrayList<Trip>();
 	}
 
-	protected List<Trip> tripsBy(User user)
+	private List<Trip> tripsBy(User user)
 			throws DependentClassCallDuringUnitTestException {
-		return TripDao.findTripByUser(user);
+		return tripDao.tripsBy(user);
 	}
 }

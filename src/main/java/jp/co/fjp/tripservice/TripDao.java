@@ -10,6 +10,12 @@ public class TripDao {
 	public static List<Trip> findTripByUser(User user)
 			throws DependentClassCallDuringUnitTestException {
 		// TODO Auto-generated method stub
-		throw new DependentClassCallDuringUnitTestException("TripDao should not be invoked on an JUNIT test");
+		throw new DependentClassCallDuringUnitTestException(
+				"TripDao should not be invoked on an JUNIT test");
+	}
+
+	public List<Trip> tripsBy(User user)
+			throws DependentClassCallDuringUnitTestException {
+		return TripDao.findTripByUser(user);
 	}
 }
