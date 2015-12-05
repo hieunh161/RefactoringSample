@@ -6,20 +6,27 @@ import java.util.List;
 import jp.co.fjp.tripservice.Trip;
 
 public class User {
+	List<User> friends = new ArrayList<User>();
+	
+	List<Trip> trips = new ArrayList<Trip>();
+	
+	
 
 	public List<User> getFriends() {
-		// TODO Auto-generated method stub
-		return new ArrayList<User>();
+		return friends;
 	}
 
 	public void addFriend(User anotherUser) {
-		// TODO Auto-generated method stub
+		friends.add(anotherUser);
 		
 	}
 
-	public void addTrip(Trip toBrazil) {
-		// TODO Auto-generated method stub
-		
+	public void addTrip(Trip trip) {
+		trips.add(trip);
+	}
+
+	public List<Trip> trips() {
+		return trips;
 	}
 
 }
