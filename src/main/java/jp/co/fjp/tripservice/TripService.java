@@ -6,19 +6,18 @@ import java.util.List;
 import jp.co.fjp.exception.DependentClassCallDuringUnitTestException;
 import jp.co.fjp.exception.UserNotLoggedInException;
 import jp.co.fjp.user.User;
-import jp.co.fjp.user.UserSession;
 
 public class TripService {
 	// get trip by user
-	public List<Trip> getTripsByUser(User user)
+	public List<Trip> getTripsByUser(User user, User loggedInUser)
 			throws UserNotLoggedInException,
 			DependentClassCallDuringUnitTestException {
 		// get user session then
-		if (getLoggedInUser() == null) {
+		if (loggedInUser == null) {
 			throw new UserNotLoggedInException();
 		}
 
-		return user.isFriendWith(getLoggedInUser()) ? tripsBy(user)
+		return user.isFriendWith(loggedInUser) ? tripsBy(user)
 				: noTrips();
 
 	}
@@ -30,10 +29,5 @@ public class TripService {
 	protected List<Trip> tripsBy(User user)
 			throws DependentClassCallDuringUnitTestException {
 		return TripDao.findTripByUser(user);
-	}
-
-	protected User getLoggedInUser()
-			throws DependentClassCallDuringUnitTestException {
-		return UserSession.getInstance().getLoggedUser();
 	}
 }
