@@ -39,9 +39,8 @@ public class TripServiceTest {
 	public void should_not_return_any_trip_when_users_are_not_friends()
 			throws UserNotLoggedInException,
 			DependentClassCallDuringUnitTestException {
-		User friend = new User();
-		friend.addFriend(ANOTHER_USER);
-		friend.addTrip(TO_BRAZIL);
+		User friend = UserBuilder.aUser().friendsWith(ANOTHER_USER)
+				.withTrips(TO_BRAZIL).build();
 		List<Trip> friendTrips = tripService.getTripsByUser(friend);
 		Assert.assertThat(friendTrips.size(), Matchers.is(0));
 	}
@@ -50,11 +49,9 @@ public class TripServiceTest {
 	public void should_return_trips_when_users_are_friends()
 			throws UserNotLoggedInException,
 			DependentClassCallDuringUnitTestException {
-		User friend = new User();
-		friend.addFriend(ANOTHER_USER);
-		friend.addFriend(loggedInUser);
-		friend.addTrip(TO_BRAZIL);
-		friend.addTrip(TO_LONDON);
+		User friend = UserBuilder.aUser()
+				.friendsWith(ANOTHER_USER, loggedInUser)
+				.withTrips(TO_BRAZIL, TO_LONDON).build();
 		List<Trip> friendTrips = tripService.getTripsByUser(friend);
 		Assert.assertThat(friendTrips.size(), Matchers.is(2));
 
@@ -65,7 +62,7 @@ public class TripServiceTest {
 		protected User getLoggedInUser() {
 			return loggedInUser;
 		}
-		
+
 		@Override
 		protected List<Trip> tripsBy(User user)
 				throws DependentClassCallDuringUnitTestException {
